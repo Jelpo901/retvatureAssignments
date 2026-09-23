@@ -3,7 +3,7 @@ const collection = "products";
 
 use(database);
 
-/*db.createCollection(products, {
+db.createCollection(products, {
     validator: {
         $jsonSchema: {
             bsonType: "object",
@@ -32,11 +32,11 @@ db.products.insertMany([
     {name: "Wireless Mouse", price: 40, inStock: true, specs: {brand: "Logitech"}},
     {name: "Mechanical Keyboard", price: 120, inStock: false, specs: {brand: "SteelSeries"}},
     {name: "Gaming Monitor", price: 220, inStock: true, specs: {brand: "Dell"}}
-]); */
+]); 
 
 //db.products.insertOne(name: 21, price: "this is wrong", inStock: maybe?);
 
-/*db.products.updateOne(
+db.products.updateOne(
     {name: "Wireless Mouse"},
     {$set: {category: "Accessories"}}
 );
@@ -71,4 +71,47 @@ db.products.find(
 
 db.products.find(
     {category: {$in: ["Accessories"]}}
-); */
+); 
+
+db.createCollection("orders"); 
+
+const product = db.products.findOne({ name: "Wireless Mouse" });
+db.orders.insertOne({
+    productId: product._id,
+    quantity: 2
+}); 
+
+db.orders.aggregate([
+    {
+        $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "_id",
+            as: "product"
+        }
+    },
+    {
+        $unwind: "$product"
+    }
+]); 
+
+db.orders.aggregate([
+    {
+        $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "_id",
+            as: "product"
+        }
+    },
+    {
+        $unwind: "$product"
+    },
+    {
+        $project: {
+            _id: 0,
+            productName: "$product.name",
+            quantity: 1
+        }
+    }
+]); 
