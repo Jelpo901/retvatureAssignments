@@ -1,10 +1,10 @@
---select * from customer;
---select * from customer where state = 'AZ';
---select * from invoice where invoice_date < current_date - interval '6 months';
--- update customer set phone = null where phone !~ '^\+1 \d{3} \d{3}-\d{4}$'; 
---select * from track where milliseconds > 180000;
---update customer set country = 'USA', address = null, city = null, state = null where country != 'USA';
-/*
+select * from customer;
+select * from customer where state = 'AZ';
+select * from invoice where invoice_date < current_date - interval '6 months';
+update customer set phone = null where phone !~ '^\+1 \d{3} \d{3}-\d{4}$'; 
+select * from track where milliseconds > 180000;
+update customer set country = 'USA', address = null, city = null, state = null where country != 'USA';
+
 create or replace function totalSpending (p_customer_id integer)
 returns integer as $spent$
 declare 
@@ -17,9 +17,9 @@ begin
     return spent;
 end;
 $spent$ language plpgsql;
-*/
 
-/*
+
+
 create or replace procedure updateEmployeeReportToField (i_employee_id integer, i_new_manager_id integer)
 language plpgsql
 as $$
@@ -47,7 +47,7 @@ BEGIN
     where employee_id = i_employee_id;
 end;
 $$;
-*/
+
 
 create schema pets;
 create table pets.Customer(
